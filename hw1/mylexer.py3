@@ -2,7 +2,7 @@ def main():
     num_lines = int(input())
     print("Attempting to identify {} words".format(num_lines))
 
-    for x in range(num_lines):
+    for i in range(num_lines):
         # Read the next word
         current_word = input()
         if is_integer(current_word):
