@@ -2,7 +2,7 @@
 CS3500 HW1 regular expressions
 Integer: (\+|-)?\d+
 Decimal: (\+|-)?\d+\.\d+
-Scientific: (\+|-)?\d+\.\d+E(\+|-)?0*[1-9]+0*
+Scientific: (\+|-)?\d+\.\d+E(\+|-)?0*[1-9]+\d+
 Hex: (\d|[A-F])+\d*[A-F]*H
 Phone Number: ^(\(\d{3}\)\d{3}\-\d{4}|\d{3}(.|\-)\d{3}(\2)\d{4})$
 Keyword: while|else|end|print
