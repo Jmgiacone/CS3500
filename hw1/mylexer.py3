@@ -34,7 +34,6 @@ def is_integer(word):
 
     for i in range(word_length):
         current_char = word[i]
-        print(current_char, end=" ")
 
         if state == 1:
             if current_char in string.digits:
@@ -42,22 +41,19 @@ def is_integer(word):
             elif current_char in ['+', '-']:
                 state = 2
             else:
-                print()
                 return False
         elif state == 2:
             if current_char in string.digits:
                 state = 3
             else:
-                print()
                 return False
         else:
             if current_char in string.digits:
                 state = 3
             else:
-                print()
+                
                 return False
-
-    print()
+    
     return state == 3
 
 
@@ -75,22 +71,20 @@ def is_decimal(word):
 
     # Start the automaton from the character after '.'
     word = word[period_index + 1:]
-    print(word)
+    
     word_length = len(word)
     state = 1
 
     for i in range(word_length):
         current_char = word[i]
-        print(current_char, end=" ")
+        
         if state == 1:
             if current_char in string.digits:
                 state = 2
             else:
-                print()
                 return False
         else:
             if current_char not in string.digits:
-                print()
                 return False
 
     return state == 2
