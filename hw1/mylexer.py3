@@ -33,20 +33,20 @@ if __name__ == "__main__":
 
     for x in range(num_lines):
         # Read the next word
-        word = input()
-        if is_integer(word):
+        current_word = input()
+        if is_integer(current_word):
             print("Integer")
-        elif is_decimal(word):
+        elif is_decimal(current_word):
             print("Decimal")
-        elif is_scientific(word):
+        elif is_scientific(current_word):
             print("Scientific")
-        elif is_hex(word):
+        elif is_hex(current_word):
             print("Hex")
-        elif is_phone_number(word):
+        elif is_phone_number(current_word):
             print("Phone number")
-        elif is_keyword(word):
+        elif is_keyword(current_word):
             print("Keyword")
-        elif is_identifier(word):
+        elif is_identifier(current_word):
             print("Identifier")
         else:
             print("Invalid")
