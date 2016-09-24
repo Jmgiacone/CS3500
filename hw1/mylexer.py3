@@ -8,6 +8,8 @@ def main():
     for i in range(num_lines):
         # Read the next word
         current_word = input()
+        print("{}: ".format(i + 1), end="")
+
         if is_integer(current_word):
             print("Integer")
         elif is_decimal(current_word):
@@ -95,7 +97,45 @@ def is_decimal(word):
 
 
 def is_scientific(word):
-    return False
+    # Check to see if there is an 'E' in the word
+    try:
+        e_index = list(word).index("E")
+    except ValueError:
+        # No 'E' in the string, can't be a scientific number
+        return False
+
+    if not is_decimal(word[:e_index]):
+        return False
+
+    word = word[e_index + 1:]
+
+    word_length = len(word)
+    state = 1
+
+    for i in range(word_length):
+        current_char = word[i]
+
+        if state == 1:
+            if current_char == "0":
+                pass
+            elif current_char in string.digits:
+                state = 3
+            elif current_char in ["+", "-"]:
+                state = 2
+            else:
+                return False
+        elif state == 2:
+            if current_char == 0:
+                pass
+            elif current_char in string.digits:
+                state = 3
+            else:
+                return False
+        else:
+            if current_char not in string.digits:
+                return False
+
+    return state == 3
 
 
 def is_hex(word):
