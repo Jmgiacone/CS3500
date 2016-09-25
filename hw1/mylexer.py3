@@ -241,7 +241,23 @@ def is_keyword(word):
 
 
 def is_identifier(word):
-    return False
+    state = 1
+
+    # Keywords can't be identifiers or hex numbers
+    if is_keyword(word) or is_hex(word):
+        return False
+
+    for current_char in word:
+        if state == 1:
+            if current_char in string.ascii_letters:
+                state = 2
+            else:
+                return False
+        else:
+            if not (current_char in string.ascii_letters or current_char in string.digits or current_char == "_"):
+                return False
+
+    return state == 2
 
 
 # Main code
