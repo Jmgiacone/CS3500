@@ -167,7 +167,77 @@ def is_phone_number(word):
 
 
 def is_keyword(word):
-    return False
+    state = 1
+
+    for current_char in word:
+        if state == 1:
+            if current_char == "w":
+                state = 2
+            elif current_char == "e":
+                state = 3
+            elif current_char == "p":
+                state = 10
+            else:
+                return False
+        elif state == 2:
+            if current_char == "h":
+                state = 4
+            else:
+                return False
+        elif state == 3:
+            if current_char == "l":
+                state = 5
+            elif current_char == "n":
+                state = 6
+            else:
+                return False
+        elif state == 4:
+            if current_char == "i":
+                state = 7
+            else:
+                return False
+        elif state == 5:
+            if current_char == "s":
+                state = 8
+            else:
+                return False
+        elif state == 6:
+            if current_char == "d":
+                state = 9
+            else:
+                return False
+        elif state == 7:
+            if current_char == "l":
+                state = 8
+            else:
+                return False
+        elif state == 8:
+            if current_char == "e":
+                state = 9
+            else:
+                return False
+        elif state == 10:
+            if current_char == "r":
+                state = 11
+            else:
+                return False
+        elif state == 11:
+            if current_char == "i":
+                state = 12
+            else:
+                return False
+        elif state == 12:
+            if current_char == "n":
+                state = 13
+            else:
+                return False
+        elif state == 13:
+            if current_char == "t":
+                state = 9
+            else:
+                return False
+
+    return state == 9
 
 
 def is_identifier(word):
