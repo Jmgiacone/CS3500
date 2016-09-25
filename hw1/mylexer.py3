@@ -29,12 +29,9 @@ def main():
 
 
 def is_integer(word):
-    word_length = len(word)
     state = 1
 
-    for i in range(word_length):
-        current_char = word[i]
-
+    for current_char in word:
         if state == 1:
             if current_char in string.digits:
                 state = 3
@@ -71,13 +68,9 @@ def is_decimal(word):
 
     # Start the automaton from the character after '.'
     word = word[period_index + 1:]
-    
-    word_length = len(word)
     state = 1
 
-    for i in range(word_length):
-        current_char = word[i]
-        
+    for current_char in word:
         if state == 1:
             if current_char in string.digits:
                 state = 2
@@ -102,13 +95,9 @@ def is_scientific(word):
         return False
 
     word = word[e_index + 1:]
-
-    word_length = len(word)
     state = 1
 
-    for i in range(word_length):
-        current_char = word[i]
-
+    for current_char in word:
         if state == 1:
             if current_char == "0":
                 pass
@@ -133,15 +122,11 @@ def is_scientific(word):
 
 
 def is_hex(word):
-    word_length = len(word)
-
     # First 6 ascii letters in uppercase: [A, B, C, D, E, F]
     uppercase_hex_digits = string.ascii_uppercase[:6]
     state = 1
 
-    for i in range(word_length):
-        current_char = word[i]
-
+    for current_char in word:      
         if state == 1:
             if current_char in string.digits or current_char in uppercase_hex_digits:
                 state = 2
