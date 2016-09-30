@@ -1,4 +1,9 @@
 import string
+# Jordan Giacone
+# CS3500 - Section A
+# Homework 1 - Lexical Analyzer
+# 9/29/16
+# The lexical analyzer in its entirety
 
 
 def main():
