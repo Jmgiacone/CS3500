@@ -148,7 +148,157 @@ def is_hex(word):
 
 
 def is_phone_number(word):
-    return False
+    state = 1
+
+    for current_char in word:
+        if state == 1:
+            if current_char in string.digits:
+                state = 7
+            elif current_char == "(":
+                state = 2
+            else:
+                return False
+        elif state == 2:
+            if current_char in string.digits:
+                state = 3
+            else:
+                return False
+        elif state == 3:
+            if current_char in string.digits:
+                state = 4
+            else:
+                return False
+        elif state == 4:
+            if current_char in string.digits:
+                state = 5
+            else:
+                return False
+        elif state == 5:
+            if current_char == ")":
+                state = 6
+            else:
+                return False
+        elif state == 6:
+            if current_char in string.digits:
+                state = 14
+            else:
+                return False
+        elif state == 7:
+            if current_char in string.digits:
+                state = 8
+            else:
+                return False
+        elif state == 8:
+            if current_char in string.digits:
+                state = 9
+            else:
+                return False
+        elif state == 9:
+            if current_char == ".":
+                state = 17
+            elif current_char == "-":
+                state = 10
+            else:
+                return False
+        elif state == 10:
+            if current_char in string.digits:
+                state = 11
+            else:
+                return False
+        elif state == 11:
+            if current_char in string.digits:
+                state = 12
+            else:
+                return False
+        elif state == 12:
+            if current_char in string.digits:
+                state = 13
+            else:
+                return False
+        elif state == 13:
+            if current_char == "-":
+                state = 25
+            else:
+                return False
+        elif state == 14:
+            if current_char in string.digits:
+                state = 15
+            else:
+                return False
+        elif state == 15:
+            if current_char in string.digits:
+                state = 16
+            else:
+                return False
+        elif state == 16:
+            if current_char == "-":
+                state = 25
+            else:
+                return False
+        elif state == 17:
+            if current_char in string.digits:
+                state = 18
+            else:
+                return False
+        elif state == 18:
+            if current_char in string.digits:
+                state = 19
+            else:
+                return False
+        elif state == 19:
+            if current_char in string.digits:
+                state = 20
+            else:
+                return False
+        elif state == 20:
+            if current_char == ".":
+                state = 21
+            else:
+                return False
+        elif state == 21:
+            if current_char in string.digits:
+                state = 22
+            else:
+                return False
+        elif state == 22:
+            if current_char in string.digits:
+                state = 23
+            else:
+                return False
+        elif state == 23:
+            if current_char in string.digits:
+                state = 24
+            else:
+                return False
+        elif state == 24:
+            if current_char in string.digits:
+                state = 29
+            else:
+                return False
+        elif state == 25:
+            if current_char in string.digits:
+                state = 26
+            else:
+                return False
+        elif state == 26:
+            if current_char in string.digits:
+                state = 27
+            else:
+                return False
+        elif state == 27:
+            if current_char in string.digits:
+                state = 28
+            else:
+                return False
+        elif state == 28:
+            if current_char in string.digits:
+                state = 29
+            else:
+                return False
+        else:
+            return False
+
+    return state == 29
 
 
 def is_keyword(word):
