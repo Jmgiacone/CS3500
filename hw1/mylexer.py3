@@ -3,29 +3,30 @@ import string
 
 def main():
     num_lines = int(input())
-    print("Attempting to identify {} words".format(num_lines))
+    print(num_lines)
 
     for i in range(num_lines):
         # Read the next word
         current_word = input()
+
         print("{}: ".format(i + 1), end="")
 
         if is_integer(current_word):
-            print("Integer")
+            print("Integer.")
         elif is_decimal(current_word):
-            print("Decimal")
+            print("Decimal.")
         elif is_scientific(current_word):
-            print("Scientific")
+            print("Scientific.")
         elif is_hex(current_word):
-            print("Hex")
+            print("Hexadecimal.")
         elif is_phone_number(current_word):
-            print("Phone number")
+            print("Phone.")
         elif is_keyword(current_word):
-            print("Keyword")
+            print("Keyword.")
         elif is_identifier(current_word):
-            print("Identifier")
+            print("Identifier.")
         else:
-            print("Invalid")
+            print("INVALID!")
 
 
 def is_integer(word):
