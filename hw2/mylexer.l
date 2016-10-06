@@ -34,7 +34,7 @@ UNKNOWN         [^{INT_CONST}|{DEC_CONST}|{SCI_CONST}|{HEX_CONST}|{BIN_CONST}|{P
 {SCI_CONST}        { cout << "#" << numTokens << ": TOKEN: SCICONST   LEXEME: " << yytext << endl; numTokens++; }
 {HEX_CONST}        { cout << "#" << numTokens << ": TOKEN: HEXCONST   LEXEME: " << yytext << endl; numTokens++; }
 {BIN_CONST}        { cout << "#" << numTokens << ": TOKEN: BINCONST   LEXEME: " << yytext << endl; numTokens++; }
-{PHN_CONST}        { cout << "#" << numTokens << ": TOKEN: PHNCONST   LEXEME: " << yytext << endl; numTokens++; }
+{PHN_CONST}        { cout << "#" << numTokens << ": TOKEN: PHCONST    LEXEME: " << yytext << endl; numTokens++; }
 {KEYWORD}          { cout << "#" << numTokens << ": TOKEN: KEYWORD    LEXEME: " << yytext << endl; numTokens++; }
 {IDENT}            { cout << "#" << numTokens << ": TOKEN: IDENT      LEXEME: " << yytext << endl; numTokens++; }
 {STR_CONST}        { cout << "#" << numTokens << ": TOKEN: STRCONST   LEXEME: " << yytext << endl; numTokens++; }
@@ -46,6 +46,6 @@ UNKNOWN         [^{INT_CONST}|{DEC_CONST}|{SCI_CONST}|{HEX_CONST}|{BIN_CONST}|{P
 int main()
 {
     yylex();
-    cout << "Read " << numLines << " lines" << endl;
+    cout << numLines << " lines processed." << endl;
     return 0;
 }
