@@ -2,7 +2,13 @@ import string
 import sys
 import copy
 
-# Important global variables
+# Jordan Giacone
+# CS3500 - Section A
+# Homework 3 - Lexical Analyzer
+# 11/9/16
+# The robolang parser
+
+# Important global variable
 tokens = []
 
 
@@ -28,9 +34,9 @@ def is_expression():
     if not is_simple_expression():
         return False
 
-    get_token()
-
-    if is_relation():
+    # If the next token is in the first set of relation
+    if tokens[1] in ["<", ">", "=", "#"]:
+        get_token()
         get_token()
 
         return is_simple_expression()
@@ -42,15 +48,14 @@ def is_simple_expression():
     # SimpleExpression := Term { AddOperator Term }
 
     if is_term():
-        get_token()
-
-        while is_add_operator():
+        # If token is in first set of addOperator
+        while tokens[1] in ["+", "-", "or"]:
             get_token()
-
-            if is_term():
+            if is_add_operator():
                 get_token()
-            else:
-                return False
+
+                if not is_term():
+                    return False
     else:
         return False
 
@@ -61,18 +66,15 @@ def is_term():
     # Term := Factor { MulOperator Factor }
 
     if is_factor():
-        previous_tokens = copy.deepcopy(tokens)
-        get_token()
-
-        while is_mul_operator():
+        # If token is in first set of MulOperator
+        while tokens[1] in ["*", "/", "and"]:
             get_token()
 
-            if is_factor():
+            if is_mul_operator():
                 get_token()
-            else:
-                return False
-        tokens.clear()
-        tokens.extend(previous_tokens)
+
+                if not is_factor():
+                    return False
     else:
         return False
 
@@ -93,6 +95,7 @@ def is_factor():
 
             return tokens[0] == ")"
     elif tokens[0] == "~":
+        get_token()
         return is_factor()
 
     return False
@@ -169,9 +172,9 @@ def is_if_statement():
                     get_token()
 
                     if is_statement_sequence():
-                        get_token()
 
-                        if tokens[0] == "else":
+                        if tokens[1] == "else":
+                            get_token()
                             # Hit option else part
                             get_token()
 
@@ -199,6 +202,7 @@ def is_loop_statement():
                 get_token()
 
                 if tokens[0] == ")":
+                    get_token()
                     if is_statement_sequence():
                         get_token()
 
@@ -210,48 +214,35 @@ def is_loop_statement():
 def is_statement():
     # Statement := [ Assignment | IfStatement | LoopStatement | FwdStatement | RotStatement ]
 
-    temp_tokens = copy.deepcopy(tokens)
-    if is_assignment():
+    # If token is in first set of assignment
+    if is_identifier(tokens[0]):
+        return is_assignment()
+    elif tokens[0] == "if":
+        return is_if_statement()
+    elif tokens[0] == "while":
+        return is_loop_statement()
+    elif tokens[0] == "forward":
+        return is_fwd_statement()
+    elif tokens[0] == "rotate":
+        return is_rot_statement()
+    # The next token is in the follow set of statement
+    elif tokens[0] in {"endw", "blorp", "else", "endif", "while", "rotate", "forward", "if"} \
+            or is_identifier(tokens[0]):
         return True
 
-    tokens.clear()
-    tokens.extend(temp_tokens)
-
-    if is_if_statement():
-        return True
-
-    tokens.clear()
-    tokens.extend(temp_tokens)
-
-    if is_loop_statement():
-        return True
-
-    tokens.clear()
-    tokens.extend(temp_tokens)
-
-    if is_fwd_statement():
-        return True
-
-    tokens.clear()
-    tokens.extend(temp_tokens)
-
-    if is_rot_statement():
-        return True
-
-    tokens.clear()
-    tokens.extend(temp_tokens)
-
-    return tokens[0] in {"endw", "blorp", "else", "endif"}
+    return False
 
 
 def is_statement_sequence():
     # StatementSequence = Statement { Statement }
 
     if is_statement():
-        get_token()
 
-        while is_statement():
+        # TODO: FIX THIS
+        while tokens[1] in ["while", "rotate", "if", "forward"] or is_identifier(tokens[1]):
             get_token()
+            if not is_statement():
+                return False
 
         return True
     else:
@@ -268,12 +259,14 @@ def is_routine_declaration():
             get_token()
 
             if tokens[0] == "blip":
-                get_token()
 
-                if is_statement_sequence():
+                if tokens[1] in ["while", "rotate", "if", "forward"] or is_identifier(tokens[1]):
                     get_token()
+                    if is_statement_sequence():
+                        get_token()
 
-                    return tokens[0] == "blorp"
+                        return tokens[0] == "blorp"
+                    return False
                 return tokens[0] == "blorp"
 
     return False
@@ -283,10 +276,11 @@ def is_routine_sequence():
     # RoutineSequence := RoutineDeclaration { RoutineDeclaration }
 
     if is_routine_declaration():
-        get_token()
-
-        while is_routine_declaration():
+        # If current token is in first set of routineDeclaration
+        if len(tokens) > 1 and tokens[1] in ["prog"]:
             get_token()
+            while is_routine_declaration():
+                get_token()
 
         return True
 
@@ -295,8 +289,11 @@ def is_routine_sequence():
 
 def get_token():
     # Remove the desired tokens[0] from the front
-    if len(tokens) > 0:
+    if len(tokens) > 1:
         tokens.pop(0)
+    else:
+        print("Error: Ran out of tokens!")
+        exit(1)
 
 
 def is_integer(word):
@@ -382,18 +379,17 @@ def is_identifier(word):
 
 
 def main():
-    """inputs = input().split(" ")
+    # tokens_literal = ["prog", "main", "blip", "x", "is", "2", "+", "2", "!", "forward", "(", "x", "*", "100", ")", "!",
+    #                   "blorp"]
+    # tokens_literal = ["prog", "square", "blip", "x", "is", "90", "!", "y", "is", "100", "!", "c", "is", "1", "!",
+    #                   "while", "(", "c", "<", "4", ")", "forward", "(", "y", ")", "!", "rotate", "(", "x", ")", "!",
+    #                   "c", "is", "c", "+", "1", "!", "endw", "blorp"]
+    tokens_literal = ["prog", "gcd", "blip", "while", "(", "~", "(", "a", "=", "b", ")", ")", "if", "(", "a", ">", "b",
+                      ")", "a", "is", "a", "-", "b", "!", "else", "b", "is", "b", "-", "a", "!", "endif", "endw",
+                      "blorp", "prog", "dummy", "blip", "blorp"]
 
-    for a_token in inputs:
-        a_token = a_token.strip("\n")
-
-        if a_token != "":
-            tokens.append(a_token)"""
-
-    tokens_literal = ["prog", "main", "blip", "x", "is", "2", "+", "2", "!", "forward", "(", "x", "*", "100", ")", "!", "blop"]
-
-    for a_token in tokens_literal:
-        tokens.append(a_token)
+    tokens.clear()
+    tokens.extend(tokens_literal)
     """for line in sys.stdin:
         for a_token in line.split(" "):
             a_token = a_token.strip("\n")
