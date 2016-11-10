@@ -1,10 +1,9 @@
 import string
 import sys
-import copy
 
 # Jordan Giacone
 # CS3500 - Section A
-# Homework 3 - Lexical Analyzer
+# Homework 3 - Recursive Descent Parser for Robolang
 # 11/9/16
 # The robolang parser
 
@@ -172,7 +171,6 @@ def is_if_statement():
                     get_token()
 
                     if is_statement_sequence():
-
                         if tokens[1] == "else":
                             get_token()
                             # Hit option else part
@@ -238,7 +236,6 @@ def is_statement_sequence():
 
     if is_statement():
 
-        # TODO: FIX THIS
         while tokens[1] in ["while", "rotate", "if", "forward"] or is_identifier(tokens[1]):
             get_token()
             if not is_statement():
@@ -277,10 +274,10 @@ def is_routine_sequence():
 
     if is_routine_declaration():
         # If current token is in first set of routineDeclaration
-        if len(tokens) > 1 and tokens[1] in ["prog"]:
+        while len(tokens) > 1 and tokens[1] in ["prog"]:
             get_token()
-            while is_routine_declaration():
-                get_token()
+            if not is_routine_declaration():
+                return False
 
         return True
 
@@ -379,26 +376,11 @@ def is_identifier(word):
 
 
 def main():
-    # tokens_literal = ["prog", "main", "blip", "x", "is", "2", "+", "2", "!", "forward", "(", "x", "*", "100", ")", "!",
-    #                   "blorp"]
-    # tokens_literal = ["prog", "square", "blip", "x", "is", "90", "!", "y", "is", "100", "!", "c", "is", "1", "!",
-    #                   "while", "(", "c", "<", "4", ")", "forward", "(", "y", ")", "!", "rotate", "(", "x", ")", "!",
-    #                   "c", "is", "c", "+", "1", "!", "endw", "blorp"]
-    tokens_literal = ["prog", "gcd", "blip", "while", "(", "~", "(", "a", "=", "b", ")", ")", "if", "(", "a", ">", "b",
-                      ")", "a", "is", "a", "-", "b", "!", "else", "b", "is", "b", "-", "a", "!", "endif", "endw",
-                      "blorp", "prog", "dummy", "blip", "blorp"]
-
-    tokens.clear()
-    tokens.extend(tokens_literal)
-    """for line in sys.stdin:
+    for line in sys.stdin:
         for a_token in line.split(" "):
             a_token = a_token.strip("\n")
-
             if a_token != "":
                 tokens.append(a_token)
-                print(a_token)
-
-    print(tokens)"""
 
     if is_routine_sequence():
         print("CORRECT")
