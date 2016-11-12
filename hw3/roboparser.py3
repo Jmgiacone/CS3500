@@ -289,7 +289,7 @@ def get_token():
     if len(tokens) > 1:
         tokens.pop(0)
     else:
-        print("Error: Ran out of tokens!")
+        print("INVALID!")
         exit(1)
 
 
@@ -349,10 +349,8 @@ def is_decimal(word):
 
 
 def is_keyword(word):
-    return word == "=" or word == "+" or word == "-" or word == "*" or word == "/" or word == " or" or word == "and" \
-           or word == "~" or word == "(" or word == ")" or word == "<" or word == ">" or word == "= " or word == "!" \
-           or word == "forward" or word == "rotate" or word == "if" or word == "endif" or word == "else" \
-           or word == "while" or word == "endw" or word == "prog" or word == "blip" or word == "blorp"
+    return word in ["=", "+", "-", "*", "/", " or", "and", "~", "(", ")", "<", ">", "= ", "!", "forward", "rotate",
+                    "if", "endif", "else", "while", "endw", "prog", "blip", "blorp", "is", "#"]
 
 
 def is_identifier(word):
