@@ -7,17 +7,11 @@ using std::endl;
 using std::left;
 using std::setw;
 
-                // Function prototype 
 void writeToken(const char* toktype);
-
-
-int line_num = 1;      // to keep line numbers 
+int line_num = 1;
 %}
 
-
-     /* -- OPTIONS and DEFINITIONS -- */
 %option noyywrap
-
 
 WHITE      [ \t]
 DIGIT      [0-9]
@@ -25,14 +19,12 @@ ALPHA      [a-zA-Z]
 ALPHANUM   [a-zA-Z0-9]
 
 
-%%   /* -- REGULAR EXPRESSIONS ------------------------------------ */
-
-
-WHITE      ;                /* eat white space */
+%%
+[ \t]      ;                /* eat white space */
 \n         { line_num++; }  /* count line numbers */
 
 
-                /* Keywork tokens */
+                  /* Keywork tokens */
 "is"       { writeToken("K_IS"); return K_IS; }
 "~"        { writeToken("K_NEG"); return K_NEG; }
 "("        { writeToken("K_LPAREN"); return K_LPAREN; }
@@ -49,8 +41,7 @@ WHITE      ;                /* eat white space */
 "blip"     { writeToken("K_BLIP"); return K_BLIP; }
 "blorp"    { writeToken("K_BLORP"); return K_BLORP; }
 
-
-                /* Complex Tokens */
+                                        /* Complex Tokens */
 [+-]?{DIGIT}+              { writeToken("T_INTEGER"); return T_INTEGER; }
 [+-]?{DIGIT}+\.{DIGIT}+    { writeToken("T_DECIMAL"); return T_DECIMAL; }
 {ALPHA}{ALPHANUM}*         { writeToken("T_IDENT"); return T_IDENT; }
@@ -60,9 +51,7 @@ WHITE      ;                /* eat white space */
 
 
 
-%%   /* -- CODA --------------------------------------------------- */
-
-
+%% 
 // Purpose: prints that a token was found 
 void writeToken(const char* toktype)
 {
@@ -70,6 +59,3 @@ void writeToken(const char* toktype)
   cout << left << setw(14) << toktype;       
   cout << "LEXEME: " << yytext << endl;
 }
-
-
-

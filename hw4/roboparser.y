@@ -43,61 +43,61 @@ int yyerror(const char *p);
 
 %%
 //-- GRAMMAR RULES ---------------------------------------------
-/* NOTE: Bison likes the start symbol to be the first rule
- */
-routineSeq : routineDec { cout << "RULE: routineSeq ::= routineDec" << endl; }
-	   | routineDec routineDec { cout << "RULE: routineSeq ::= routineDec routineDec" << endl; }
-           ;
+/* NOTE: Bison likes the start symbol to be the first rule */
+routineSequence : /* empty */ { cout << "RULE: RoutineSequence ::= empty" << endl; }
+                | routineDeclaration  { cout << "RULE: RoutineSequence ::= RoutineDeclaration" << endl; }
+	        | routineDeclaration  routineSequence { cout << "RULE: RoutineSequence ::= RoutineDeclaration RoutineSequence" << endl; }
+                ;
 
-routineDec : K_PROG T_IDENT K_BLIP K_BLORP { cout << "RULE: routineDec ::= prog ident blip" << endl; }
-	   | K_PROG T_IDENT K_BLIP statementSequence K_BLORP { cout << "RULE: routineDec ::= prog ident blip statementSequence blorp" << endl; }
-           ;
+routineDeclaration : K_PROG T_IDENT K_BLIP statementSequence K_BLORP { cout << "RULE: RoutineDeclaration ::= prog identifier blip StatementSequence blorp" << endl; }
+                   ;
 
-statementSequence : statement { cout << "RULE: statementSeq ::= statement" << endl; } 
-                  | statement statementSequence { cout << "RULE: statementSeq ::= statement statementSeq" << endl; } 
+statementSequence : statement { cout << "RULE: StatementSequence ::= Statement" << endl; } 
+                  | statement statementSequence { cout << "RULE: StatementSequence ::= Statement StatementSequence" << endl; } 
              ;
 
-statement : /* empty */   { cout << "RULE: statement ::= empty" << endl; } 
-	  | assignment    { cout << "RULE: statement ::= assignment" << endl; }
-          | ifStatement   { cout << "RULE: statement ::= ifStatement" << endl; }
-          | loopStatement { cout << "RULE: statement ::= loopStatement" << endl; }
-          | fwdStatement  { cout << "RULE: statement ::= fwdStatement" << endl; }
-          | rotStatement  { cout << "RULE: statement ::= rotStatement" << endl; }
+statement : /* empty */   { cout << "RULE: Statement ::= empty" << endl; } 
+	  | assignment    { cout << "RULE: Statement ::= Assignment" << endl; }
+          | ifStatement   { cout << "RULE: Statement ::= IfStatement" << endl; }
+          | loopStatement { cout << "RULE: Statement ::= LoopStatement" << endl; }
+          | fwdStatement  { cout << "RULE: Statement ::= FwdStatement" << endl; }
+          | rotStatement  { cout << "RULE: Statement ::= RotStatement" << endl; }
           ;
 
-loopStatement : K_WHILE K_LPAREN expression K_RPAREN statementSequence K_ENDW { cout << "RULE: loopStatement ::= while ( expression ) statementSequence endw" << endl;}
+loopStatement : K_WHILE K_LPAREN expression K_RPAREN statementSequence K_ENDW { cout << "RULE: LoopStatement ::= while ( Expression ) StatementSequence endw" << endl;}
 	      ;
 
-ifStatement : K_IF K_LPAREN expression K_RPAREN statementSequence K_ENDIF { cout << "RULE: ifStatement ::= if ( expression ) statementSequence endif" << endl; }
-	    | K_IF K_LPAREN expression K_RPAREN statementSequence K_ELSE statementSequence K_ENDIF {cout << "RULE: ifStatement ::= if ( expression ) statementSequence else statementSequence endif" << endl; }
+ifStatement : K_IF K_LPAREN expression K_RPAREN statementSequence K_ENDIF { cout << "RULE: IfStatement ::= if ( Expression ) StatementSequence endif" << endl; }
+	    | K_IF K_LPAREN expression K_RPAREN statementSequence K_ELSE statementSequence K_ENDIF {cout << "RULE: IfStatement ::= if ( Expression ) StatementSequence else StatementSequence endif" << endl; }
             ;
 
-rotStatement : K_ROTATE K_LPAREN expression K_RPAREN K_BANG { cout << "RULE: rotStatement ::= rotate ( expression )" << endl; }
+rotStatement : K_ROTATE K_LPAREN expression K_RPAREN K_BANG { cout << "RULE: RotStatement ::= rotate ( Expression ) !" << endl; }
              ;
 
-fwdStatement : K_FORWARD K_LPAREN expression K_RPAREN K_BANG { cout << "RULE: fwdStatement ::= forward ( expression ) !" << endl; }
+
+fwdStatement : K_FORWARD K_LPAREN expression K_RPAREN K_BANG { cout << "RULE: FwdStatement ::= forward ( Expression ) !" << endl; }
              ;
 
-assignment : T_IDENT K_IS expression K_BANG { cout << "RULE: Assignment ::= ident is expresion !" << endl; }
+assignment : T_IDENT K_IS expression K_BANG { cout << "RULE: Assignment ::= identifier is Expression !" << endl; }
            ;
 
-factor : T_INTEGER { cout << "RULE: factor ::= T_INTEGER" << endl; }
-       | T_DECIMAL { cout << "RULE: factor ::= T_DECIMAL" << endl; }
-       | T_IDENT { cout << "RULE: factor ::= T_IDENT" << endl; }
-       | K_LPAREN expression K_RPAREN { cout << "RULE: factor ::= ( expression )" << endl; }
-       | K_NEG factor { cout << "RULE: factor := ~factor" << endl; }
+factor : T_INTEGER { cout << "RULE: Factor ::= integer" << endl; }
+       | T_DECIMAL { cout << "RULE: Factor ::= decimal" << endl; }
+       | T_IDENT { cout << "RULE: Factor ::= identifier" << endl; }
+       | K_LPAREN expression K_RPAREN { cout << "RULE: Factor ::= ( Expression )" << endl; }
+       | K_NEG factor { cout << "RULE: Factor ::= ~ Factor" << endl; }
        ;
 
-term : factor { cout << "RULE: term ::= factor" << endl; }
-     | factor T_MULOPERATOR factor { cout << "RULE: term ::= factor MUL_OPERATOR factor" << endl; }
+term : factor { cout << "RULE: Term ::= Factor" << endl; }
+     | factor T_MULOPERATOR term { cout << "RULE: Term ::= Factor MulOperator Term" << endl; }
      ;
 
-simpleExpression : term { cout << "RULE: simpleExpression ::= term" << endl; }
-		 | term T_ADDOPERATOR term { cout << "RULE: simpleExpression ::= term add_operator term" << endl; }
+simpleExpression : term { cout << "RULE: SimpleExpression ::= Term" << endl; }
+		 | term T_ADDOPERATOR simpleExpression { cout << "RULE: SimpleExpression ::= Term AddOperator SimpleExpression" << endl; }
                  ;
 
-expression : simpleExpression { cout << "RULE: expression ::= simpleExpression" << endl;}
-	   | simpleExpression T_RELATION simpleExpression { cout << "RULE: expression ::= simpleExpression relation simpleExpression" << endl; }
+expression : simpleExpression { cout << "RULE: Expression ::= SimpleExpression" << endl;}
+	   | simpleExpression T_RELATION simpleExpression { cout << "RULE: Expression ::= SimpleExpression Relation SimpleExpression" << endl; }
            ;
 
 %%
@@ -111,9 +111,7 @@ int yyerror(const char *p)
 
 int main()
 {
-  int failcode;
-  cout << "Hello Flex + Bison" << endl;
-  failcode = yyparse();
+  int failcode = yyparse();
 
 
   if (failcode)
